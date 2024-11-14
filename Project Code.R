@@ -81,3 +81,10 @@ for (i in 1:nrow(workouts)){
     workouts$Core[i] <- 1
   }
 }
+
+
+#summary statistics for The Whole Data set and Calaries Burned per 30 minutes
+summary(workouts)
+
+summary(workouts$Burns.Calories..per.30.min.)
+
