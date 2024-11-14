@@ -1,6 +1,26 @@
 # Import data set 
 workouts <- read.csv("~/Computer Science/Data Science/Project/Exercise Data Group Project/Top 50 Excerice for your body.csv")
 
+########################### Mutate Data set for total amount of reps from entire workout ###########################
+workouts <- workouts %>%
+  mutate(
+    total_reps = Sets * Reps
+  )
+
+########################### Mutate Data set for Boolean value for Equipment Needed ###########################
+
+workouts <- workouts %>%
+  mutate(
+    Equipment.Needed.Bool = 1
+  )
+
+#handles None or equipment as None since none is needed at the minimum
+for (i in 1:nrow(workouts)){
+  if (grepl("None", workouts$Equipment.Needed[i])){
+    workouts$Equipment.Needed.Bool[i] <- 0
+  }
+}
+
 ########################### Mutate Data Set for Muscle Group Boolean Columns ###########################
 workouts <- workouts %>%
   mutate(
@@ -20,7 +40,10 @@ workouts <- workouts %>%
 
 for (i in 1:nrow(workouts)){
   
-  if (grepl("Triceps", workouts$Target.Muscle.Group[i]) | grepl("Shoulders", workouts$Target.Muscle.Group[i]) | grepl("Biceps", workouts$Target.Muscle.Group[i]) | grepl("Deltoids", workouts$Target.Muscle.Group[i])) {
+  if (grepl("Triceps", workouts$Target.Muscle.Group[i]) |
+      grepl("Shoulders", workouts$Target.Muscle.Group[i]) |
+      grepl("Biceps", workouts$Target.Muscle.Group[i]) |
+      grepl("Deltoids", workouts$Target.Muscle.Group[i])) {
     workouts$Arms[i] <- 1
   }
   
