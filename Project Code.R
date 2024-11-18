@@ -1,3 +1,4 @@
+### Author: William Collier ###
 # Necessary Libraries
 library(dplyr) 
 
