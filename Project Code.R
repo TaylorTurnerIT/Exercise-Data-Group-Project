@@ -4,12 +4,14 @@ library(dplyr)
 # Import data set 
 workouts <- read.csv("~/Computer Science/Data Science/Project/Exercise Data Group Project/Top 50 Excerice for your body.csv")
 
+### Author: William Collier ###
 ########################### Mutate Data set for total amount of reps from entire workout ###########################
 workouts <- workouts %>%
   mutate(
     total_reps = Sets * Reps
   )
 
+### Author: William Collier ###
 ########################### Mutate Data set for Boolean value for Equipment Needed ###########################
 
 workouts <- workouts %>%
@@ -17,6 +19,7 @@ workouts <- workouts %>%
     Equipment.Needed.Bool = 1
   )
 
+### Author: William Collier ###
 #handles None or equipment as None since none is needed at the minimum
 for (i in 1:nrow(workouts)){
   if (grepl("None", workouts$Equipment.Needed[i])){
@@ -24,6 +27,7 @@ for (i in 1:nrow(workouts)){
   }
 }
 
+### Author: William Collier ###
 ########################### Mutate Data Set for Muscle Group Boolean Columns ###########################
 workouts <- workouts %>%
   mutate(
@@ -83,6 +87,7 @@ for (i in 1:nrow(workouts)){
 }
 
 
+### Author: William Collier ###
 #summary statistics for The Whole Data set and Calaries Burned per 30 minutes
 summary(workouts)
 
