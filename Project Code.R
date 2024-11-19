@@ -1,3 +1,12 @@
+###### Setup ###################################################################
+
+### Author: Taylor Turner ###
+install.packages("tidyverse")
+install.packages("ggplot2")
+install.packages("dplyr")
+
+library(tidyverse)
+library(ggplot2)
 ### Author: William Collier ###
 # Necessary Libraries
 library(dplyr) 
@@ -16,19 +25,21 @@ summary(raw_workouts)
 
 ## Name.of.Exercise
 
-# Basic summary statistic
-summary(raw_workouts$Name.of.Exercise)
-
-# Verify there are no duplicates in names
-raw_workouts %>%
-  add_count(Name.of.Exercise) %>%
-  filter(n>1) %>%
-  distinct()
+  # Basic summary statistic
+  summary(raw_workouts$Name.of.Exercise)
+  
+  # Verify there are no duplicates in names
+  raw_workouts %>%
+    add_count(Name.of.Exercise) %>%
+    filter(n>1) %>%
+    distinct()
 
 ## Sets
 
   # Basic summary statistic
   summary(raw_workouts$Sets)
+  
+  # Visualize with box plot
 
 ## Reps
 
