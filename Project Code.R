@@ -12,14 +12,53 @@ raw_workouts <- read.csv("Top 50 Excerice for your body.csv")
 # Simple summary operation
 summary(raw_workouts)
 
-# Go through each attribute and 
+# Go through each attribute and perform EDA
+
+## Name.of.Exercise
+
+# Basic summary statistic
+summary(raw_workouts$Name.of.Exercise)
+
 # Verify there are no duplicates in names
 raw_workouts %>%
   add_count(Name.of.Exercise) %>%
   filter(n>1) %>%
   distinct()
 
+## Sets
 
+  # Basic summary statistic
+  summary(raw_workouts$Sets)
+
+## Reps
+
+  # Basic summary statistic
+  summary(raw_workouts$Reps)
+
+## Benefit
+
+  # Basic summary statistic
+  summary(raw_workouts$Benefit)
+
+## Burns.Calories..per.30.min
+
+  # Basic summary statistic
+  summary(raw_workouts$Burns.Calories..per.30.min.)
+
+## Target.Muscle.Group
+
+  # Basic summary statistic
+  summary(raw_workouts$Target.Muscle.Group)
+
+## Equipment.Needed
+
+  # Basic summary statistic
+  summary(raw_workouts$Equipment.Needed)
+
+## Difficulty.Level
+  
+  # Basic summary statistic
+  summary(raw_workouts$Difficulty.Level)
 
 ###### Data Cleaning and Transformation ########################################
 
