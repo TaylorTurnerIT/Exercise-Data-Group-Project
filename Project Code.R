@@ -2,15 +2,30 @@
 # Necessary Libraries
 library(dplyr) 
 
-# Import data set 
-workouts <- read.csv("~/Computer Science/Data Science/Project/Exercise Data Group Project/Top 50 Excerice for your body.csv")
+# Import data set (Choose one)
+raw_workouts <- read.csv("~/Computer Science/Data Science/Project/Exercise Data Group Project/Top 50 Excerice for your body.csv")
+raw_workouts <- read.csv("Top 50 Excerice for your body.csv")
+
+###### Exploratory Data Analysis ###############################################
 
 ### Author: Taylor Turner ###
-## Verify there are no duplicates in names
-workouts %>%
+# Simple summary operation
+summary(raw_workouts)
+
+# Go through each attribute and 
+# Verify there are no duplicates in names
+raw_workouts %>%
   add_count(Name.of.Exercise) %>%
   filter(n>1) %>%
   distinct()
+
+
+
+###### Data Cleaning and Transformation ########################################
+
+### Author: Taylor Turner ###
+# Duplicate the data before transforming it
+workouts <- raw_workouts
 
 ### Author: William Collier ###
 # Mutate Data set for total amount of reps from entire workout
