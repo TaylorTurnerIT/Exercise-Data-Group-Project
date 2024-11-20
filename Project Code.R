@@ -40,12 +40,16 @@ summary(raw_workouts)
   summary(raw_workouts$Sets)
   
   # Visualize with box plot
-  barplot(table(raw_workouts$Sets), xlab = "Occurances", ylab = "Set Count", main = "Number of Sets for Exercises")
+  barplot(table(raw_workouts$Sets), xlab = "Occurrences", ylab = "Set Count", main = "Number of Sets for Exercises")
   
 ## Reps
 
   # Basic summary statistic
   summary(raw_workouts$Reps)
+  
+  # Visualize with box plot
+  barplot(table(raw_workouts$Reps), xlab = "Occurrences", ylab = "Rep Count", main = "Number of Reps for Exercises")
+  
 
 ## Benefit
 
@@ -56,21 +60,30 @@ summary(raw_workouts)
 
   # Basic summary statistic
   summary(raw_workouts$Burns.Calories..per.30.min.)
+  
+  # Visualize with box plot
+  boxplot(raw_workouts$Burns.Calories..per.30.min., ylab = "Calorie Burn Rate", main = "Calorie Burn Rate for Exercises")
 
 ## Target.Muscle.Group
 
   # Basic summary statistic
   summary(raw_workouts$Target.Muscle.Group)
+  
+  # Further visualization appears later after transformation
 
 ## Equipment.Needed
 
   # Basic summary statistic
   summary(raw_workouts$Equipment.Needed)
-
+  
+  # Further visualization appears later after transformation
+  
 ## Difficulty.Level
   
   # Basic summary statistic
   summary(raw_workouts$Difficulty.Level)
+  
+  barplot(table(raw_workouts$Difficulty.Level, ))
 
 ###### Data Cleaning and Transformation ########################################
 
@@ -90,30 +103,35 @@ workouts <- workouts %>%
 
 workouts <- workouts %>%
   mutate(
-    Equipment.Needed.Bool = 1
+    Equipment.Needed.Bool = TRUE
   )
 
 ### Author: William Collier ###
 # Handles None or equipment as None since none is needed at the minimum
 for (i in 1:nrow(workouts)){
   if (grepl("None", workouts$Equipment.Needed[i])){
-    workouts$Equipment.Needed.Bool[i] <- 0
+    workouts$Equipment.Needed.Bool[i] <- FALSE
   }
 }
+
+### Author: Taylor Turner ###
+# Visualize the equipment needed as a barplot
+
+barplot(c(sum(workouts$Equipment.Needed.Bool), 50-sum(workouts$Equipment.Needed.Bool)), ylab = "Count", main = "Equipment Requirement for Exercises", names.arg = c("Required", "Not Required"))
 
 ### Author: William Collier ###
 # Mutate Data Set for Muscle Group Boolean Columns
 workouts <- workouts %>%
   mutate(
-    Arms = 0,
+    Arms = FALSE,
     # Triceps, Shoulders, Biceps, Deltoids
-    Chest = 0,
+    Chest = FALSE,
     # Chest
-    Back = 0,
+    Back = FALSE,
     # Back
-    Legs = 0,
+    Legs = FALSE,
     # Quadriceps, Hamstrings, Glutes, Calves, Legs, Hip,
-    Core = 0
+    Core = FALSE
     # Core, Obliques, Abs
   )
 
@@ -125,15 +143,15 @@ for (i in 1:nrow(workouts)){
       grepl("Shoulders", workouts$Target.Muscle.Group[i]) |
       grepl("Biceps", workouts$Target.Muscle.Group[i]) |
       grepl("Deltoids", workouts$Target.Muscle.Group[i])) {
-    workouts$Arms[i] <- 1
+    workouts$Arms[i] <- TRUE
   }
   
   if (grepl("Chest", workouts$Target.Muscle.Group[i])){
-    workouts$Chest[i] <- 1
+    workouts$Chest[i] <- TRUE
   }
   
   if (grepl("Back", workouts$Target.Muscle.Group[i])){
-    workouts$Back[i] <- 1
+    workouts$Back[i] <- TRUE 
   }
   
   if (grepl("Quadriceps", workouts$Target.Muscle.Group[i]) | 
@@ -142,27 +160,27 @@ for (i in 1:nrow(workouts)){
       grepl("Calves", workouts$Target.Muscle.Group[i]) | 
       grepl("Legs", workouts$Target.Muscle.Group[i]) | 
       grepl("Hip", workouts$Target.Muscle.Group[i])) {
-    workouts$Legs[i] <- 1
+    workouts$Legs[i] <- TRUE
   }
   
   if (grepl("Core", workouts$Target.Muscle.Group[i]) | 
       grepl("Obliques", workouts$Target.Muscle.Group[i]) | 
       grepl("Abs", workouts$Target.Muscle.Group[i])) {
-    workouts$Core[i] <- 1
+    workouts$Core[i] <- TRUE
   }
   
   if (grepl("Full Body", workouts$Target.Muscle.Group[i])){
-    workouts$Arms[i] <- 1
-    workouts$Chest[i] <- 1
-    workouts$Back[i] <- 1
-    workouts$Legs[i] <- 1
-    workouts$Core[i] <- 1
+    workouts$Arms[i] <- TRUE
+    workouts$Chest[i] <- TRUE
+    workouts$Back[i] <- TRUE
+    workouts$Legs[i] <- TRUE
+    workouts$Core[i] <- TRUE
   }
 }
 
 
 ### Author: William Collier ###
-# Summary statistics for The whole data set and Calories Burned per 30 minutes
+# Summary statistics for the mutated data set and Calories Burned per 30 minutes
 summary(workouts)
 
 summary(workouts$Burns.Calories..per.30.min.)
