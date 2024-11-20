@@ -40,7 +40,8 @@ summary(raw_workouts)
   summary(raw_workouts$Sets)
   
   # Visualize with box plot
-
+  barplot(table(raw_workouts$Sets), xlab = "Occurances", ylab = "Set Count", main = "Number of Sets for Exercises")
+  
 ## Reps
 
   # Basic summary statistic
