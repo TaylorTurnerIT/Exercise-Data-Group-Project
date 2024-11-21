@@ -82,8 +82,6 @@ summary(raw_workouts)
   
   # Basic summary statistic
   summary(raw_workouts$Difficulty.Level)
-  
-  barplot(table(raw_workouts$Difficulty.Level, ))
 
 ###### Data Cleaning and Transformation ########################################
 
