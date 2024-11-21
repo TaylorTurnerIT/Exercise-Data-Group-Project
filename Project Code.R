@@ -185,3 +185,12 @@ summary(workouts)
 
 summary(workouts$Burns.Calories..per.30.min.)
 
+### Author: ###
+# Section for Multiple Linear Regression
+
+### Author: ###
+# Section for Decision Tree
+
+### Author: ###
+# Section for Multiple Linear Regression
+
