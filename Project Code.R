@@ -91,7 +91,7 @@ summary(raw_workouts)
 # Duplicate the data before transforming it
 workouts <- raw_workouts
 
-### Author: William Collier ###
+### Author: Gavin Walker ###
 # Mutate Data set for total amount of reps from entire workout
 workouts <- workouts %>%
   mutate(
