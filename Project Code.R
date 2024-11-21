@@ -192,5 +192,5 @@ summary(workouts$Burns.Calories..per.30.min.)
 # Section for Decision Tree
 
 ### Author: ###
-# Section for Multiple Linear Regression
+# Section for Random Forest
 
