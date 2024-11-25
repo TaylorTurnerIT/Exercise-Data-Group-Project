@@ -4,16 +4,23 @@
 install.packages("tidyverse")
 install.packages("ggplot2")
 install.packages("dplyr")
+install.packages("caret")
+install.packages("randomForest")
 
-library(tidyverse)
-library(ggplot2)
 ### Author: William Collier ###
 # Necessary Libraries
 library(dplyr) 
+library(tidyverse)
+library(ggplot2)
+library(caret)
+library(randomForest)
 
-# Import data set (Choose one)
-raw_workouts <- read.csv("~/Computer Science/Data Science/Project/Exercise Data Group Project/Top 50 Excerice for your body.csv")
-raw_workouts <- read.csv("Top 50 Excerice for your body.csv")
+### Author: Jonah Perkins ###
+# Set the seed 
+set.seed(82698143)
+
+# Import the data set,   choosing the file titled "Top 50 Excerice for your body" wherever you have it downloaded 
+raw_workouts <- read.csv(file.choose())
 
 ###### Exploratory Data Analysis ###############################################
 
@@ -185,12 +192,49 @@ summary(workouts)
 
 summary(workouts$Burns.Calories..per.30.min.)
 
-### Author: ###
+### Author: Jonah Perkins ###
+#Create training and test data sets
+trainIndex <- createDataPartition(workouts$"Burns.Calories..per.30.min.", 
+                                  p = .8, 
+                                  list = FALSE, 
+                                  times = 1)
+
+trainData <- workouts[trainIndex, ]
+testData <- workouts[-trainIndex, ]
+
+summary(trainData)
+summary(testData)
+
+### Author: Tristan Martin ###
 # Section for Multiple Linear Regression
 
-### Author: ###
+### Author: Gavin Walker ###
 # Section for Decision Tree
 
-### Author: ###
-# Section for Multiple Linear Regression
+### Author: Jonah Perkins ###
+# Creating a predictive model using Random Forest
+
+# Define the training control
+trainControl <- trainControl(method = "cv", number = 10)
+
+# Train the Random Forest model
+rfModel <- train(Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.Level+total_reps+Arms+Chest+Back+Legs+Core,
+                 data = trainData, 
+                 method = "rf", 
+                 trControl = trainControl)
+
+# Print the model
+print(rfModel)
+
+# Predict on the test data
+predictions <- predict(rfModel, newdata = testData)
+
+
+# Generate the confusion matrix
+#doesn't work
+confusionMatrix(predictions, testData$Burns.Calories..per.30.min.)
+
+
+
+
 
