@@ -89,8 +89,6 @@ summary(raw_workouts)
   
   # Basic summary statistic
   summary(raw_workouts$Difficulty.Level)
-  
-  barplot(table(raw_workouts$Difficulty.Level, ))
 
 ###### Data Cleaning and Transformation ########################################
 
@@ -98,7 +96,7 @@ summary(raw_workouts)
 # Duplicate the data before transforming it
 workouts <- raw_workouts
 
-### Author: William Collier ###
+### Author: Gavin Walker ###
 # Mutate Data set for total amount of reps from entire workout
 workouts <- workouts %>%
   mutate(
@@ -205,8 +203,12 @@ testData <- workouts[-trainIndex, ]
 summary(trainData)
 summary(testData)
 
-### Author: Tristan Martin ###
-# Section for Multiple Linear Regression
+### Author: Taylor Turner ###
+# Visualize multiple regression for muscle groups
+
+model <- lm(data = workouts, workouts$Burns.Calories..per.30.min. ~ workouts$total_reps + workouts$Equipment.Needed.Bool + workouts$Difficulty.Level + workouts$Arms + workouts$Chest + workouts$Back + workouts$Legs + workouts$Core)
+summary(model)
+avPlots(model = model)
 
 ### Author: Gavin Walker ###
 # Section for Decision Tree
