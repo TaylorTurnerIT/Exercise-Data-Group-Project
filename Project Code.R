@@ -4,9 +4,11 @@
 install.packages("tidyverse")
 install.packages("ggplot2")
 install.packages("dplyr")
+install.packages("car")
 
 library(tidyverse)
 library(ggplot2)
+library(car)
 ### Author: William Collier ###
 # Necessary Libraries
 library(dplyr) 
@@ -183,8 +185,12 @@ summary(workouts)
 
 summary(workouts$Burns.Calories..per.30.min.)
 
-### Author: ###
-# Section for Multiple Linear Regression
+### Author: Taylor Turner ###
+# Visualize multiple regression for muscle groups
+
+model <- lm(data = workouts, workouts$Burns.Calories..per.30.min. ~ workouts$total_reps + workouts$Equipment.Needed.Bool + workouts$Difficulty.Level + workouts$Arms + workouts$Chest + workouts$Back + workouts$Legs + workouts$Core)
+summary(model)
+avPlots(model = model)
 
 ### Author: ###
 # Section for Decision Tree
