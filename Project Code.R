@@ -1,21 +1,12 @@
 ###### Setup ###################################################################
 
 ### Author: Taylor Turner ###
-install.packages("tidyverse")
-install.packages("ggplot2")
-install.packages("dplyr")
-install.packages("car")
-install.packages("caret")
-install.packages("randomForest")
-
-### Author: William Collier ###
-# Necessary Libraries
-library(dplyr) 
-library(tidyverse)
-library(ggplot2)
-library(caret)
-library(randomForest)
-library(car)
+# Check if packages are installed for easy of installation
+packages <- c("tidyverse", "ggplot2", "dplyr", "car", "caret", "randomForest")
+new_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
+if(length(new_packages)) install.packages(new_packages)
+# load libraries
+lapply(packages, library, character.only = TRUE)
 
 ### Author: Jonah Perkins ###
 # Set the seed 
