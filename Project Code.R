@@ -196,22 +196,6 @@ workouts$Back <- as.factor(workouts$Back)
 workouts$Legs <- as.factor(workouts$Legs)
 workouts$Core <- as.factor(workouts$Core)
 
-## Author: Jonah Perkins ###
-# Create a column to show the Burns.Calories.Range
-
-workouts <- workouts %>%
-  mutate(
-    Burns.Calories.Range = ""
-    # Allows for classification
-  )
-
-for (i in 1:nrow(workouts)){
-  if (workouts$Burns.Calories..per.30.min.[i] < 150){
-    workouts$Burns.Calories.Range[i] = "<150"
-  }
-  #...
-}
-
 ### Author: William Collier ###
 # Summary statistics for the mutated data set and Calories Burned per 30 minutes
 summary(workouts)
@@ -332,7 +316,9 @@ rfModel <- train(Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.
                  data = trainData, 
                  method = "rf", 
                  trControl = trainControl,
-                 tuneLength = 5)
+                 tuneLength = 5,
+                 tuneGrid = expand.grid(mtry = c(2, 3, 4)),
+                 ntree = 1000)
 
 # Print the model
 print(rfModel)
