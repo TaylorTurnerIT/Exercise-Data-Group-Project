@@ -240,7 +240,7 @@ train_controlDT <- trainControl(method = "cv", number = 10)
 
 # Train the decision tree model
 dt_model <- train(
-  Burn.Calories.per..30.min. ~ Equipment.Needed.Bool+Difficulty.Level+total_reps+Arms+Chest+Back+Legs+Core,                   
+  Burn.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.Level+total_reps+Arms+Chest+Back+Legs+Core,                   
   data = trainData,               
   method = "rpart",               
   trControl = train_controlDT,      
@@ -257,7 +257,7 @@ print(dt_model$bestTune)
 predictions <- predict(dt_model, newdata = testData)
 
 # Calculates the root mean square error and prints it out
-rmse_dt <- sqrt(mean((predictions - testData$Burns.Calories..per.30.min.)^2))
+rmse_dt <- sqrt(mean((predictions - testData$Burns..Calories.per.30.min.)^2))
 cat("RMSE: ", rmse_dt, "\n")
 
 
