@@ -280,7 +280,7 @@ mean_target <- mean(testData$Burns.Calories..per.30.min.)
 percentage_error_tuned <- (rmse_dt_tuned / mean_target) * 100
 cat("RMSE as % of mean:", percentage_error_tuned, "%\n")
 
-rpart.plot(dt_model_tuned)
+rpart.plot(dt_model_tuned, type = 2, extra = 101, under = TRUE, main = "Decision Tree for Calorie Prediction")
 
 rpart.plot(dt_model$finalModel, type = 2, extra = 101, under = TRUE, main = "Decision Tree for Calorie Prediction")
 
