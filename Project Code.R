@@ -4,6 +4,7 @@
 install.packages("tidyverse")
 install.packages("ggplot2")
 install.packages("dplyr")
+install.packages("car")
 install.packages("caret")
 install.packages("randomForest")
 
@@ -14,6 +15,7 @@ library(tidyverse)
 library(ggplot2)
 library(caret)
 library(randomForest)
+library(car)
 
 ### Author: Jonah Perkins ###
 # Set the seed 
@@ -223,11 +225,12 @@ summary(trainData)
 summary(testData)
 
 ### Author: Taylor Turner ###
-# Visualize multiple regression for muscle groups
-
-model <- lm(data = workouts, workouts$Burns.Calories..per.30.min. ~ workouts$total_reps + workouts$Equipment.Needed.Bool + workouts$Difficulty.Level + workouts$Arms + workouts$Chest + workouts$Back + workouts$Legs + workouts$Core)
+# Multiple regression
+model <- lm(data = testData, workouts$Burns.Calories..per.30.min. ~ workouts$total_reps + workouts$Equipment.Needed.Bool + workouts$Difficulty.Level + workouts$Arms + workouts$Chest + workouts$Back + workouts$Legs + workouts$Core)
 summary(model)
-avPlots(model = model)
+avPlots(model = model) # Visualize results of the model
+plot(fitted(model), residuals(model))
+abline(model)
 
 ### Author: Gavin Walker ###
 # Section for Decision Tree
