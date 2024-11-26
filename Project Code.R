@@ -274,11 +274,15 @@ print(dt_model)
 print(dt_model$bestTune)
 
 # Predicts based on test data
-predictions <- predict(dt_model, newdata = testData)
+predictions_dt <- predict(dt_model, newdata = testData)
 
 # Calculates the root mean square error and prints it out
-rmse_dt <- sqrt(mean((predictions - testData$Burns.Calories..per.30.min.)^2))
+rmse_dt <- sqrt(mean((predictions_dt - testData$Burns.Calories..per.30.min.)^2))
 cat("RMSE: ", rmse_dt, "\n")
+
+mean_target <- mean(testData$Burns.Calories..per.30.min.)
+percentage_error <- (rmse_dt / mean_target) * 100
+cat("RMSE as % of mean:", percentage_error, "%\n")
 
 ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = predictions)) +
   geom_point(color = "blue") +
