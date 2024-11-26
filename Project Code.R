@@ -231,6 +231,8 @@ testData <- workouts[-trainIndex, ]
 summary(trainData)
 summary(testData)
 
+#-------------------------------------------------------------------------------------------------------------------------
+
 ### Author: Taylor Turner ###
 # Multiple regression
 # Fit model on training data
@@ -287,6 +289,8 @@ ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = prediction
   geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
   labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
   theme_minimal()
+
+#-------------------------------------------------------------------------------------------------------------------------
 
 ### Author: Jonah Perkins ###
 # Creating a predictive model using Random Forest
