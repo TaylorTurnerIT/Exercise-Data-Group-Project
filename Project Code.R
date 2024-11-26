@@ -282,8 +282,6 @@ cat("RMSE as % of mean:", percentage_error_tuned, "%\n")
 
 rpart.plot(dt_model_tuned)
 
-rpart.plot(dt_model$finalModel, type = 2, extra = 101, under = TRUE, main = "Decision Tree for Calorie Prediction")
-
 ### Author: Jonah Perkins ###
 # Creating a predictive model using Random Forest
 
