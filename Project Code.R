@@ -6,7 +6,14 @@ packages <- c("tidyverse", "ggplot2", "dplyr", "car", "caret", "randomForest", "
 new_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
 if(length(new_packages)) install.packages(new_packages)
 # load libraries
-lapply(packages, library, character.only = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(car)
+library(caret)
+library(randomForest)
+library(rpart)
+library(rpart.plot)
 
 ### Author: Jonah Perkins ###
 # Set the seed 
