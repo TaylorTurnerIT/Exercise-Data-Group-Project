@@ -259,65 +259,28 @@ cat("RMSE as % of mean:", percentage_error, "%\n")
 cat("RMSE:", rmse, "\n")
 cat("R-squared:", r2, "\n")
 
+#-------------------------------------------------------------------------------------------------------------------------
+
 ### Author: Gavin Walker ###
 # Section for Decision Tree
 
-# Defines the training control
-train_controlDT <- trainControl(method = "cv", number = 10)
-
-# Train the decision tree model
-dt_model <- train(
-  Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.Level+total_reps+Arms+Chest+Back+Legs+Core,                   
-  data = trainData,               
-  method = "rpart",               
-  trControl = train_controlDT,      
-  tuneLength = 10                 
-)
-
-# Prints the model
-print(dt_model)
-
-# Views the best parameter for tuning
-print(dt_model$bestTune)
-
-# Predicts based on test data
-predictions_dt <- predict(dt_model, newdata = testData)
-
-# Calculates the root mean square error and prints it out
-rmse_dt <- sqrt(mean((predictions_dt - testData$Burns.Calories..per.30.min.)^2))
-cat("RMSE: ", rmse_dt, "\n")
-
-mean_target <- mean(testData$Burns.Calories..per.30.min.)
-percentage_error <- (rmse_dt / mean_target) * 100
-cat("RMSE as % of mean:", percentage_error, "%\n")
-
-ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = predictions)) +
-  geom_point(color = "blue") +
-  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
-  labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
-  theme_minimal()
-
-tune_grid <- expand.grid(cp = seq(0.001, 0.05, by = 0.005))
-dt_model_tuned <- train(
+dt_model_tuned <- rpart(
   Burns.Calories..per.30.min. ~ Equipment.Needed.Bool + Difficulty.Level + total_reps + Arms + Chest + Back + Legs + Core,
   data = trainData,
-  method = "rpart",
-  trControl = trainControl(method = "cv", number = 10),
-  tuneGrid = tune_grid
+  control = rpart.control(cp = 0.001, maxdepth = 10, minsplit = 5)
 )
 
 predictions_dt_tuned <- predict(dt_model_tuned, newdata = testData)
 
 # Calculates the root mean square error and prints it out
 rmse_dt_tuned <- sqrt(mean((predictions_dt_tuned - testData$Burns.Calories..per.30.min.)^2))
-cat("RMSE: ", rmse_dt, "\n")
+cat("RMSE: ", rmse_dt_tuned, "\n")
 
 mean_target <- mean(testData$Burns.Calories..per.30.min.)
 percentage_error_tuned <- (rmse_dt_tuned / mean_target) * 100
 cat("RMSE as % of mean:", percentage_error_tuned, "%\n")
 
-rpart.plot(dt_model_tuned$finalModel)
-
+rpart.plot(dt_model_tuned)
 
 rpart.plot(dt_model$finalModel, type = 2, extra = 101, under = TRUE, main = "Decision Tree for Calorie Prediction")
 
