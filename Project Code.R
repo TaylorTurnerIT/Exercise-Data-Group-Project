@@ -34,67 +34,69 @@ summary(raw_workouts)
 
 ## Name.of.Exercise
 
-  # Basic summary statistic
-  summary(raw_workouts$Name.of.Exercise)
-  
-  # Verify there are no duplicates in names
-  raw_workouts %>%
-    add_count(Name.of.Exercise) %>%
-    filter(n>1) %>%
-    distinct()
+# Basic summary statistic
+summary(raw_workouts$Name.of.Exercise)
+
+# Verify there are no duplicates in names
+raw_workouts %>%
+  add_count(Name.of.Exercise) %>%
+  filter(n>1) %>%
+  distinct()
 
 ## Sets
 
-  # Basic summary statistic
-  summary(raw_workouts$Sets)
-  
-  # Visualize with box plot
-  barplot(table(raw_workouts$Sets), xlab = "Occurrences", ylab = "Set Count", main = "Number of Sets for Exercises")
-  
+# Basic summary statistic
+summary(raw_workouts$Sets)
+
+# Visualize with box plot
+barplot(table(raw_workouts$Sets), xlab = "Occurrences", ylab = "Set Count", main = "Number of Sets for Exercises")
+
 ## Reps
 
-  # Basic summary statistic
-  summary(raw_workouts$Reps)
-  
-  # Visualize with box plot
-  barplot(table(raw_workouts$Reps), xlab = "Occurrences", ylab = "Rep Count", main = "Number of Reps for Exercises")
-  
+# Basic summary statistic
+summary(raw_workouts$Reps)
+
+# Visualize with box plot
+barplot(table(raw_workouts$Reps), xlab = "Occurrences", ylab = "Rep Count", main = "Number of Reps for Exercises")
+
 
 ## Benefit
 
-  # Basic summary statistic
-  summary(raw_workouts$Benefit)
+# Basic summary statistic
+summary(raw_workouts$Benefit)
 
 ## Burns.Calories..per.30.min
 
-  # Basic summary statistic
-  summary(raw_workouts$Burns.Calories..per.30.min.)
-  
-  # Visualize with box plot
-  boxplot(raw_workouts$Burns.Calories..per.30.min., ylab = "Calorie Burn Rate", main = "Calorie Burn Rate for Exercises")
+# Basic summary statistic
+summary(raw_workouts$Burns.Calories..per.30.min.)
+
+# Visualize with box plot
+boxplot(raw_workouts$Burns.Calories..per.30.min., ylab = "Calorie Burn Rate", main = "Calorie Burn Rate for Exercises")
 
 ## Target.Muscle.Group
 
-  # Basic summary statistic
-  summary(raw_workouts$Target.Muscle.Group)
-  
-  # Further visualization appears later after transformation
+# Basic summary statistic
+summary(raw_workouts$Target.Muscle.Group)
+
+# Further visualization appears later after transformation
 
 ## Equipment.Needed
 
-  # Basic summary statistic
-  summary(raw_workouts$Equipment.Needed)
-  
-  # Further visualization appears later after transformation
-  
+# Basic summary statistic
+summary(raw_workouts$Equipment.Needed)
+
+# Further visualization appears later after transformation
+
 ## Difficulty.Level
-  
-  # Basic summary statistic
-  summary(raw_workouts$Difficulty.Level)
-  
-  # Gavin Walker
-  # Plot for difficult level occurences
-  barplot(table(raw_workouts$Difficulty.Level), xlab = "Difficulty level", ylab = "Occurences", main = "Variety of Difficulty Levels for Exercises")
+
+raw_workouts$Difficulty.Level <- as.factor(raw_workouts$Difficulty.Level)
+
+# Basic summary statistic
+summary(raw_workouts$Difficulty.Level)
+
+# Gavin Walker
+# Plot for difficult level occurences
+barplot(table(raw_workouts$Difficulty.Level), xlab = "Difficulty level", ylab = "Occurences", main = "Variety of Difficulty Levels for Exercises")
 
 ###### Data Cleaning and Transformation ########################################
 
@@ -114,35 +116,36 @@ workouts <- workouts %>%
 
 workouts <- workouts %>%
   mutate(
-    Equipment.Needed.Bool = TRUE
+    Equipment.Needed.Bool = "TRUE"
   )
 
 ### Author: William Collier ###
 # Handles None or equipment as None since none is needed at the minimum
 for (i in 1:nrow(workouts)){
   if (grepl("None", workouts$Equipment.Needed[i])){
-    workouts$Equipment.Needed.Bool[i] <- FALSE
+    workouts$Equipment.Needed.Bool[i] <- "FALSE"
   }
 }
+workouts$Equipment.Needed.Bool <- as.factor(workouts$Equipment.Needed.Bool)
 
 ### Author: Taylor Turner ###
 # Visualize the equipment needed as a barplot
 
-barplot(c(sum(workouts$Equipment.Needed.Bool), 50-sum(workouts$Equipment.Needed.Bool)), ylab = "Count", main = "Equipment Requirement for Exercises", names.arg = c("Required", "Not Required"))
+#barplot(c(workouts$Equipment.Needed.Bool, workouts$Equipment.Needed.Bool), ylab = "Count", main = "Equipment Requirement for Exercises", names.arg = c("Required", "Not Required"))
 
 ### Author: William Collier ###
 # Mutate Data Set for Muscle Group Boolean Columns
 workouts <- workouts %>%
   mutate(
-    Arms = FALSE,
+    Arms = "FALSE",
     # Triceps, Shoulders, Biceps, Deltoids
-    Chest = FALSE,
+    Chest = "FALSE",
     # Chest
-    Back = FALSE,
+    Back = "FALSE",
     # Back
-    Legs = FALSE,
+    Legs = "FALSE",
     # Quadriceps, Hamstrings, Glutes, Calves, Legs, Hip,
-    Core = FALSE
+    Core = "FALSE"
     # Core, Obliques, Abs
   )
 
@@ -154,15 +157,15 @@ for (i in 1:nrow(workouts)){
       grepl("Shoulders", workouts$Target.Muscle.Group[i]) |
       grepl("Biceps", workouts$Target.Muscle.Group[i]) |
       grepl("Deltoids", workouts$Target.Muscle.Group[i])) {
-    workouts$Arms[i] <- TRUE
+    workouts$Arms[i] <- "TRUE"
   }
   
   if (grepl("Chest", workouts$Target.Muscle.Group[i])){
-    workouts$Chest[i] <- TRUE
+    workouts$Chest[i] <- "TRUE"
   }
   
   if (grepl("Back", workouts$Target.Muscle.Group[i])){
-    workouts$Back[i] <- TRUE 
+    workouts$Back[i] <- "TRUE"
   }
   
   if (grepl("Quadriceps", workouts$Target.Muscle.Group[i]) | 
@@ -171,23 +174,29 @@ for (i in 1:nrow(workouts)){
       grepl("Calves", workouts$Target.Muscle.Group[i]) | 
       grepl("Legs", workouts$Target.Muscle.Group[i]) | 
       grepl("Hip", workouts$Target.Muscle.Group[i])) {
-    workouts$Legs[i] <- TRUE
+    workouts$Legs[i] <- "TRUE"
   }
   
   if (grepl("Core", workouts$Target.Muscle.Group[i]) | 
       grepl("Obliques", workouts$Target.Muscle.Group[i]) | 
       grepl("Abs", workouts$Target.Muscle.Group[i])) {
-    workouts$Core[i] <- TRUE
+    workouts$Core[i] <- "TRUE"
   }
   
   if (grepl("Full Body", workouts$Target.Muscle.Group[i])){
-    workouts$Arms[i] <- TRUE
-    workouts$Chest[i] <- TRUE
-    workouts$Back[i] <- TRUE
-    workouts$Legs[i] <- TRUE
-    workouts$Core[i] <- TRUE
+    workouts$Arms[i] <- "TRUE"
+    workouts$Chest[i] <- "TRUE"
+    workouts$Back[i] <- "TRUE"
+    workouts$Legs[i] <- "TRUE"
+    workouts$Core[i] <- "TRUE"
   }
 }
+
+workouts$Arms <- as.factor(workouts$Arms)
+workouts$Chest <- as.factor(workouts$Chest)
+workouts$Back <- as.factor(workouts$Back)
+workouts$Legs <- as.factor(workouts$Legs)
+workouts$Core <- as.factor(workouts$Core)
 
 ## Author: Jonah Perkins ###
 # Create a column to show the Burn.Calories.Range
@@ -226,11 +235,37 @@ summary(testData)
 
 ### Author: Taylor Turner ###
 # Multiple regression
-model <- lm(data = testData, workouts$Burns.Calories..per.30.min. ~ workouts$total_reps + workouts$Equipment.Needed.Bool + workouts$Difficulty.Level + workouts$Arms + workouts$Chest + workouts$Back + workouts$Legs + workouts$Core)
-summary(model)
-avPlots(model = model) # Visualize results of the model
-plot(fitted(model), residuals(model))
-abline(model)
+# Fit model on training data
+
+cat("Levels in Equipment.Needed.Bool:", levels(trainData$Equipment.Needed.Bool), "\n")
+cat("Levels in Difficulty.Level:", levels(trainData$Difficulty.Level), "\n")
+cat("Levels in Arms:", levels(trainData$Arms), "\n")
+cat("Levels in Chest:", levels(trainData$Chest), "\n")
+cat("Levels in Back:", levels(trainData$Back), "\n")
+cat("Levels in Legs:", levels(trainData$Legs), "\n")
+cat("Levels in Core:", levels(trainData$Core), "\n")
+
+model <- lm(Burns.Calories..per.30.min. ~ total_reps + Equipment.Needed.Bool + 
+              Difficulty.Level + Arms + Chest + Back + Legs + Core, 
+            data = trainData)
+
+par(mfrow=c(2,2))
+plot(model) 
+
+# Make predictions on test set
+predictions <- predict(model, newdata = testData)
+
+# Calculate performance
+rmse <- sqrt(mean((testData$Burns.Calories..per.30.min. - predictions)^2))
+r2 <- cor(testData$Burns.Calories..per.30.min., predictions)^2
+
+mean_target <- mean(testData$Burns.Calories..per.30.min.)
+percentage_error <- (rmse / mean_target) * 100
+cat("RMSE as % of mean:", percentage_error, "%\n")
+
+#  performance metrics
+cat("RMSE:", rmse, "\n")
+cat("R-squared:", r2, "\n")
 
 ### Author: Gavin Walker ###
 # Section for Decision Tree
@@ -296,8 +331,3 @@ ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = prediction
   geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
   labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
   theme_minimal()
-
-
-
-
-
