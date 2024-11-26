@@ -2,7 +2,7 @@
 
 ### Author: Taylor Turner ###
 # Check if packages are installed for easy of installation
-packages <- c("tidyverse", "ggplot2", "dplyr", "car", "caret", "randomForest", "rpart")
+packages <- c("tidyverse", "ggplot2", "dplyr", "car", "caret", "randomForest", "rpart", "rpart.plot")
 new_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
 if(length(new_packages)) install.packages(new_packages)
 # load libraries
@@ -289,6 +289,8 @@ ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = prediction
   geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
   labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
   theme_minimal()
+
+rpart.plot(dt_model$finalModel, type = 2, extra = 101, under = TRUE, main = "Decision Tree for Calorie Prediction")
 
 ### Author: Jonah Perkins ###
 # Creating a predictive model using Random Forest
