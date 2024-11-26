@@ -199,7 +199,7 @@ workouts$Legs <- as.factor(workouts$Legs)
 workouts$Core <- as.factor(workouts$Core)
 
 ## Author: Jonah Perkins ###
-# Create a column to show the Burn.Calories.Range
+# Create a column to show the Burns.Calories.Range
 
 workouts <- workouts %>%
   mutate(
@@ -237,14 +237,6 @@ summary(testData)
 # Multiple regression
 # Fit model on training data
 
-cat("Levels in Equipment.Needed.Bool:", levels(trainData$Equipment.Needed.Bool), "\n")
-cat("Levels in Difficulty.Level:", levels(trainData$Difficulty.Level), "\n")
-cat("Levels in Arms:", levels(trainData$Arms), "\n")
-cat("Levels in Chest:", levels(trainData$Chest), "\n")
-cat("Levels in Back:", levels(trainData$Back), "\n")
-cat("Levels in Legs:", levels(trainData$Legs), "\n")
-cat("Levels in Core:", levels(trainData$Core), "\n")
-
 model <- lm(Burns.Calories..per.30.min. ~ total_reps + Equipment.Needed.Bool + 
               Difficulty.Level + Arms + Chest + Back + Legs + Core, 
             data = trainData)
@@ -275,7 +267,11 @@ train_controlDT <- trainControl(method = "cv", number = 10)
 
 # Train the decision tree model
 dt_model <- train(
+<<<<<<< Updated upstream
   Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.Level+total_reps+Arms+Chest+Back+Legs+Core,                   
+=======
+  Burns.Calories.per..30.min. ~ Equipment.Needed.Bool+Difficulty.Level+total_reps+Arms+Chest+Back+Legs+Core,                   
+>>>>>>> Stashed changes
   data = trainData,               
   method = "rpart",               
   trControl = train_controlDT,      
