@@ -291,6 +291,11 @@ predictions <- predict(dt_model, newdata = testData)
 rmse_dt <- sqrt(mean((predictions - testData$Burns.Calories..per.30.min.)^2))
 cat("RMSE: ", rmse_dt, "\n")
 
+ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = predictions)) +
+  geom_point(color = "blue") +
+  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
+  labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
+  theme_minimal()
 
 ### Author: Jonah Perkins ###
 # Creating a predictive model using Random Forest
