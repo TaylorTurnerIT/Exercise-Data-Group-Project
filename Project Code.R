@@ -183,6 +183,21 @@ for (i in 1:nrow(workouts)){
   }
 }
 
+## Author: Jonah Perkins ###
+# Create a column to show the Burn.Calories.Range
+
+workouts <- workouts %>%
+  mutate(
+    Burns.Calories.Range = ""
+    # Allows for classification
+  )
+
+for (i in 1:nrow(workouts)){
+  if (workouts$Burns.Calories..per.30.min.[i] < 150){
+    workouts$Burns.Calories.Range[i] = "<150"
+  }
+  #...
+}
 
 ### Author: William Collier ###
 # Summary statistics for the mutated data set and Calories Burned per 30 minutes
@@ -217,13 +232,14 @@ avPlots(model = model)
 # Creating a predictive model using Random Forest
 
 # Define the training control
-trainControl <- trainControl(method = "cv", number = 10)
+trainControl <- trainControl(method = "cv", number = 5)
 
 # Train the Random Forest model
 rfModel <- train(Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.Level+total_reps+Arms+Chest+Back+Legs+Core,
                  data = trainData, 
                  method = "rf", 
-                 trControl = trainControl)
+                 trControl = trainControl,
+                 tuneLength = 5)
 
 # Print the model
 print(rfModel)
@@ -231,10 +247,22 @@ print(rfModel)
 # Predict on the test data
 predictions <- predict(rfModel, newdata = testData)
 
+# Calculate RMSE
+rmse <- sqrt(mean((predictions - testData$Burns.Calories..per.30.min.)^2))
+cat("RMSE:", rmse, "\n")
+# Depending on what the seed changes this to, the model might need to be tweaked
 
-# Generate the confusion matrix
-#doesn't work
-confusionMatrix(predictions, testData$Burns.Calories..per.30.min.)
+# Evaluate RMSE. Ideally, the percentage <10%-20%
+mean_target <- mean(testData$Burns.Calories..per.30.min.)
+percentage_error <- (rmse / mean_target) * 100
+cat("RMSE as % of mean:", percentage_error, "%\n")
+
+#Plot Predicted vs. Actual
+ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = predictions)) +
+  geom_point(color = "blue") +
+  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
+  labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
+  theme_minimal()
 
 
 
