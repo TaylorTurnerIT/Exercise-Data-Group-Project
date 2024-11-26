@@ -2,7 +2,7 @@
 
 ### Author: Taylor Turner ###
 # Check if packages are installed for easy of installation
-packages <- c("tidyverse", "ggplot2", "dplyr", "car", "caret", "randomForest")
+packages <- c("tidyverse", "ggplot2", "dplyr", "car", "caret", "randomForest", "rpart")
 new_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
 if(length(new_packages)) install.packages(new_packages)
 # load libraries
