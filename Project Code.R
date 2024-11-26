@@ -282,6 +282,12 @@ cat("RMSE as % of mean:", percentage_error_tuned, "%\n")
 
 rpart.plot(dt_model_tuned)
 
+ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = predictions_dt_tuned)) +
+  geom_point(color = "blue") +
+  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
+  labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
+  theme_minimal()
+
 ### Author: Jonah Perkins ###
 # Creating a predictive model using Random Forest
 
