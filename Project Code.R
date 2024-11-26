@@ -17,7 +17,7 @@ library(rpart.plot)
 
 ### Author: Jonah Perkins ###
 # Set the seed 
-set.seed(82698143)
+set.seed(36698143)
 
 # Import the data set,   choosing the file titled "Top 50 Excerice for your body" wherever you have it downloaded 
 raw_workouts <- read.csv(file.choose())
@@ -221,7 +221,7 @@ summary(workouts$Burns.Calories..per.30.min.)
 ### Author: Jonah Perkins ###
 #Create training and test data sets
 trainIndex <- createDataPartition(workouts$"Burns.Calories..per.30.min.", 
-                                  p = .8, 
+                                  p = .7, 
                                   list = FALSE, 
                                   times = 1)
 
@@ -320,6 +320,7 @@ predictions <- predict(rfModel, newdata = testData)
 
 # Calculate RMSE
 rmse <- sqrt(mean((predictions - testData$Burns.Calories..per.30.min.)^2))
+
 cat("RMSE:", rmse, "\n")
 # Depending on what the seed changes this to, the model might need to be tweaked
 
