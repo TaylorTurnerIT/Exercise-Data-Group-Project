@@ -297,6 +297,28 @@ ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = prediction
   labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
   theme_minimal()
 
+tune_grid <- expand.grid(cp = seq(0.001, 0.05, by = 0.005))
+dt_model_tuned <- train(
+  Burns.Calories..per.30.min. ~ Equipment.Needed.Bool + Difficulty.Level + total_reps + Arms + Chest + Back + Legs + Core,
+  data = trainData,
+  method = "rpart",
+  trControl = trainControl(method = "cv", number = 10),
+  tuneGrid = tune_grid
+)
+
+predictions_dt_tuned <- predict(dt_model_tuned, newdata = testData)
+
+# Calculates the root mean square error and prints it out
+rmse_dt_tuned <- sqrt(mean((predictions_dt_tuned - testData$Burns.Calories..per.30.min.)^2))
+cat("RMSE: ", rmse_dt, "\n")
+
+mean_target <- mean(testData$Burns.Calories..per.30.min.)
+percentage_error_tuned <- (rmse_dt_tuned / mean_target) * 100
+cat("RMSE as % of mean:", percentage_error_tuned, "%\n")
+
+rpart.plot(dt_model_tuned$finalModel)
+
+
 rpart.plot(dt_model$finalModel, type = 2, extra = 101, under = TRUE, main = "Decision Tree for Calorie Prediction")
 
 ### Author: Jonah Perkins ###
