@@ -243,6 +243,8 @@ model <- lm(Burns.Calories..per.30.min. ~ total_reps + Equipment.Needed.Bool +
 
 par(mfrow=c(2,2))
 plot(model) 
+avPlots(model)
+summary(model)
 
 # Make predictions on test set
 predictions <- predict(model, newdata = testData)
@@ -267,11 +269,7 @@ train_controlDT <- trainControl(method = "cv", number = 10)
 
 # Train the decision tree model
 dt_model <- train(
-<<<<<<< Updated upstream
   Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.Level+total_reps+Arms+Chest+Back+Legs+Core,                   
-=======
-  Burns.Calories.per..30.min. ~ Equipment.Needed.Bool+Difficulty.Level+total_reps+Arms+Chest+Back+Legs+Core,                   
->>>>>>> Stashed changes
   data = trainData,               
   method = "rpart",               
   trControl = train_controlDT,      
