@@ -89,6 +89,10 @@ summary(raw_workouts)
   
   # Basic summary statistic
   summary(raw_workouts$Difficulty.Level)
+  
+  # Gavin Walker
+  # Plot for difficult level occurences
+  barplot(table(raw_workouts$Difficulty.Level), xlab = "Difficulty level", ylab = "Occurences", main = "Variety of Difficulty Levels for Exercises")
 
 ###### Data Cleaning and Transformation ########################################
 
@@ -212,6 +216,8 @@ avPlots(model = model)
 
 ### Author: Gavin Walker ###
 # Section for Decision Tree
+
+
 
 ### Author: Jonah Perkins ###
 # Creating a predictive model using Random Forest
