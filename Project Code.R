@@ -17,7 +17,8 @@ library(rpart.plot)
 
 ### Author: Jonah Perkins ###
 # Set the seed 
-set.seed(36698143)
+set.seed(36698156)
+#best: 36698156, 36698143
 
 # Import the data set,   choosing the file titled "Top 50 Excerice for your body" wherever you have it downloaded 
 raw_workouts <- read.csv(file.choose())
@@ -266,7 +267,7 @@ mean_target <- mean(testData$Burns.Calories..per.30.min.)
 percentage_error_tuned <- (rmse_dt_tuned / mean_target) * 100
 cat("RMSE as % of mean:", percentage_error_tuned, "%\n")
 
-rpart.plot(dt_model_tuned, type = 2, extra = 101, under = TRUE, main = "Decision Tree for Calorie Prediction")
+rpart.plot(dt_model_tuned)
 
 ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = predictions_dt_tuned)) +
   geom_point(color = "blue") +
@@ -280,7 +281,7 @@ ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = prediction
 # Creating a predictive model using Random Forest
 
 # Define the training control
-trainControl <- trainControl(method = "cv", number = 5)
+trainControl <- trainControl(method = "cv", number = 5, classProbs = TRUE, summaryFunction = defaultSummary)
 
 # Train the Random Forest model
 rfModel <- train(Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.Level+total_reps+Arms+Chest+Back+Legs+Core,
@@ -288,7 +289,7 @@ rfModel <- train(Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.
                  method = "rf", 
                  trControl = trainControl,
                  tuneLength = 10,
-                 tuneGrid = expand.grid(mtry = c(5,6,7,8,9,10,11,12,13)),
+                 tuneGrid = expand.grid(mtry = c(7,8,9,10,11,12,13)),
                  ntree = 900,
                  nodesize = 13,
                  maxnodes = 30,
