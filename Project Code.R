@@ -287,9 +287,12 @@ rfModel <- train(Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.
                  data = trainData, 
                  method = "rf", 
                  trControl = trainControl,
-                 tuneLength = 5,
-                 tuneGrid = expand.grid(mtry = c(2, 3, 4)),
-                 ntree = 1000)
+                 tuneLength = 10,
+                 tuneGrid = expand.grid(mtry = c(5,6,7,8,9,10,11,12,13)),
+                 ntree = 900,
+                 nodesize = 13,
+                 maxnodes = 30,
+                 importance = TRUE)
 
 # Print the model
 print(rfModel)
