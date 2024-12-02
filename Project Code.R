@@ -263,17 +263,39 @@ predictions_dt_tuned <- predict(dt_model_tuned, newdata = testData)
 rmse_dt_tuned <- sqrt(mean((predictions_dt_tuned - testData$Burns.Calories..per.30.min.)^2))
 cat("RMSE: ", rmse_dt_tuned, "\n")
 
+# Calculates the RMSE as a percentage of the mean target value
 mean_target <- mean(testData$Burns.Calories..per.30.min.)
 percentage_error_tuned <- (rmse_dt_tuned / mean_target) * 100
 cat("RMSE as % of mean:", percentage_error_tuned, "%\n")
 
+# Plots a visualization of the decision tree
 rpart.plot(dt_model_tuned)
 
+# Calculates R Squared for the model
+r_squared_dt <- cor(testData$Burns.Calories..per.30.min., predictions_dt_tuned)^2
+cat("R Squared:", r_squared_dt, "%\n")
+
+
+# Graph shows the predicted versus actual calories burned for the exercises
 ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = predictions_dt_tuned)) +
   geom_point(color = "blue") +
   geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
   labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
   theme_minimal()
+
+# Evaluates the model with the training data to test for overfitting
+train_predictions <- predict(dt_model_tuned, newdata = trainData)
+train_rmse <- sqrt(mean((train_predictions - trainData$Burns.Calories..per.30.min.)^2))
+
+# Evaluation metrics for training and test data
+cat("Train RMSE:", train_rmse, "\n")
+cat("Test RMSE:", rmse_dt_tuned, "\n")
+
+mean_target_trained <- mean(trainData$Burns.Calories..per.30.min.)
+percentage_error_trained_tuned <- (train_rmse / mean_target_trained) * 100
+cat("Train RMSE as % of mean:", percentage_error_trained_tuned, "%\n")
+cat("Test RMSE as % of mean:", percentage_error_tuned, "%\n")
+
 
 #-------------------------------------------------------------------------------------------------------------------------
 
