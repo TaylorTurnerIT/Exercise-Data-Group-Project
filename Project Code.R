@@ -283,6 +283,19 @@ ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = prediction
   labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
   theme_minimal()
 
+
+## Creates a baseline model from the mean to compare the decision tree model to
+mean_baseline <- mean(trainData$Burns.Calories..per.30.min.)
+
+predictions_mean <- rep(mean_baseline, nrow(testData))
+
+# Calculate RMSE and R-squared
+rmse_mean <- sqrt(mean((testData$Burns.Calories..per.30.min. - predictions_mean)^2))
+
+cat("Baseline Mean RMSE:", rmse_mean, "\n")
+cat("Decision Tree RMSE: ", rmse_dt_tuned, "\n")
+
+
 # Evaluates the model with the training data to test for overfitting
 train_predictions <- predict(dt_model_tuned, newdata = trainData)
 train_rmse <- sqrt(mean((train_predictions - trainData$Burns.Calories..per.30.min.)^2))
