@@ -217,6 +217,7 @@ summary(trainData)
 summary(testData)
 
 #-------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------
 
 ### Author: Taylor Turner ###
 # Multiple regression
@@ -247,16 +248,19 @@ cat("RMSE:", regression_rmse, "\n")
 cat("R-squared:", regression_r2, "\n")
 
 #-------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------
 
 ### Author: Gavin Walker ###
 # Section for Decision Tree
 
+# Trains the decision tree model
 dt_model_tuned <- rpart(
   Burns.Calories..per.30.min. ~ Equipment.Needed.Bool + Difficulty.Level + total_reps + Arms + Chest + Back + Legs + Core,
   data = trainData,
   control = rpart.control(cp = 0.001, maxdepth = 10, minsplit = 5)
 )
 
+# Predicts the tests data based on the decision tree model
 predictions_dt_tuned <- predict(dt_model_tuned, newdata = testData)
 
 # Calculates the root mean square error and prints it out
@@ -275,28 +279,23 @@ rpart.plot(dt_model_tuned)
 r_squared_dt <- cor(testData$Burns.Calories..per.30.min., predictions_dt_tuned)^2
 cat("R Squared:", r_squared_dt, "%\n")
 
-
-# Graph shows the predicted versus actual calories burned for the exercises
-ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = predictions_dt_tuned)) +
-  geom_point(color = "blue") +
-  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
-  labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
-  theme_minimal()
-
+#----------------------
 
 ## Creates a baseline model from the mean to compare the decision tree model to
 mean_baseline <- mean(trainData$Burns.Calories..per.30.min.)
 
 predictions_mean <- rep(mean_baseline, nrow(testData))
 
-# Calculate RMSE and R-squared
+# Calculate RMSE
 rmse_mean <- sqrt(mean((testData$Burns.Calories..per.30.min. - predictions_mean)^2))
 
+# Outputs Mean dn Decision Tree RMSE
 cat("Baseline Mean RMSE:", rmse_mean, "\n")
 cat("Decision Tree RMSE: ", rmse_dt_tuned, "\n")
 
+#----------------------
 
-# Evaluates the model with the training data to test for overfitting
+## Evaluates the model with the training data to test for overfitting
 train_predictions <- predict(dt_model_tuned, newdata = trainData)
 train_rmse <- sqrt(mean((train_predictions - trainData$Burns.Calories..per.30.min.)^2))
 
@@ -310,6 +309,7 @@ cat("Train RMSE as % of mean:", percentage_error_trained_tuned, "%\n")
 cat("Test RMSE as % of mean:", percentage_error_tuned, "%\n")
 
 
+#-------------------------------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------------------
 
 ### Author: Jonah Perkins ###
@@ -348,13 +348,7 @@ mean_target <- mean(testData$Burns.Calories..per.30.min.)
 percentage_error <- (rf_rmse / mean_target) * 100
 cat("RMSE as % of mean:", percentage_error, "%\n")
 
-#Plot Predicted vs. Actual
-ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = rf_predictions)) +
-  geom_point(color = "blue") +
-  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
-  labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
-  theme_minimal()
-
+#-------------------------------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------------------
 ### Author: Taylor Turner ###
 
