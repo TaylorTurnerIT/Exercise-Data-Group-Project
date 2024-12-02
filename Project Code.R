@@ -232,19 +232,19 @@ avPlots(model)
 summary(model)
 
 # Make predictions on test set
-predictions <- predict(model, newdata = testData)
+regression_predictions <- predict(model, newdata = testData)
 
 # Calculate performance
-rmse <- sqrt(mean((testData$Burns.Calories..per.30.min. - predictions)^2))
-r2 <- cor(testData$Burns.Calories..per.30.min., predictions)^2
+regression_rmse <- sqrt(mean((testData$Burns.Calories..per.30.min. - regression_predictions)^2))
+regression_r2 <- cor(testData$Burns.Calories..per.30.min., regression_predictions)^2
 
 mean_target <- mean(testData$Burns.Calories..per.30.min.)
-percentage_error <- (rmse / mean_target) * 100
+percentage_error <- (regression_rmse / mean_target) * 100
 cat("RMSE as % of mean:", percentage_error, "%\n")
 
 #  performance metrics
-cat("RMSE:", rmse, "\n")
-cat("R-squared:", r2, "\n")
+cat("RMSE:", regression_rmse, "\n")
+cat("R-squared:", regression_r2, "\n")
 
 #-------------------------------------------------------------------------------------------------------------------------
 
@@ -321,22 +321,132 @@ rfModel <- train(Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.
 print(rfModel)
 
 # Predict on the test data
-predictions <- predict(rfModel, newdata = testData)
+rf_predictions <- predict(rfModel, newdata = testData)
 
 # Calculate RMSE
-rmse <- sqrt(mean((predictions - testData$Burns.Calories..per.30.min.)^2))
+rf_rmse <- sqrt(mean((rf_predictions - testData$Burns.Calories..per.30.min.)^2))
+rf_r2 <- cor(testData$Burns.Calories..per.30.min., rf_predictions)^2
 
-cat("RMSE:", rmse, "\n")
+cat("RMSE:", rf_rmse, "\n")
 # Depending on what the seed changes this to, the model might need to be tweaked
 
 # Evaluate RMSE. Ideally, the percentage <10%-20%
 mean_target <- mean(testData$Burns.Calories..per.30.min.)
-percentage_error <- (rmse / mean_target) * 100
+percentage_error <- (rf_rmse / mean_target) * 100
 cat("RMSE as % of mean:", percentage_error, "%\n")
 
 #Plot Predicted vs. Actual
-ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = predictions)) +
+ggplot(data = NULL, aes(x = testData$Burns.Calories..per.30.min., y = rf_predictions)) +
   geom_point(color = "blue") +
   geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +
   labs(title = "Predicted vs. Actual", x = "Actual Calories Burned", y = "Predicted Calories Burned") +
   theme_minimal()
+
+#-------------------------------------------------------------------------------------------------------------------------
+### Author: Taylor Turner ###
+
+# Create a df that shows actual values and predicted values for each model for comparison
+test_predictions <- data.frame(
+  Index = 1:nrow(testData),
+  Actual = testData$Burns.Calories..per.30.min.,
+  Linear_Regression = regression_predictions,
+  Decision_Tree = predictions_dt_tuned,
+  Random_Forest = rf_predictions
+)
+
+# Multiple bar plot for all test data element comparisons
+comparison_plot <- test_predictions %>%
+  pivot_longer(
+    cols = c(Actual, Linear_Regression, Decision_Tree, Random_Forest),
+    names_to = "Model",
+    values_to = "Predicted"
+  ) %>%
+  ggplot(aes(x = as.factor(Index))) +
+  geom_bar(aes(y = Predicted, fill = Model), stat = "identity", alpha = 0.5, position = "dodge") +
+  labs(
+    title = "Actual vs Predicted Calories Burned for Each Test Exercises",
+    x = "Test Exercises",
+    y = "Calories Burned (per 30 min)",
+    fill = "Model"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+# compare means
+mean_predictions <- data.frame(
+  Model = c("Actual", "Linear Regression", "Decision Tree", "Random Forest"),
+  Value = c(
+    mean(test_predictions$Actual),
+    mean(test_predictions$Linear_Regression),
+    mean(test_predictions$Decision_Tree),
+    mean(test_predictions$Random_Forest)
+  )
+)
+
+means_plot <- ggplot(mean_predictions, aes(x = Model, y = Value, fill = Model)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = round(Value, 1)), vjust = -0.5) +
+  labs(
+    title = "Average Predicted vs Actual Calories Burned (per 30 min)",
+    x = "Model",
+    y = "Calories"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  ) +
+  scale_fill_brewer(palette = "Set2")
+
+performance_metrics <- data.frame(
+  Model = c("Linear Regression", "Decision Tree", "Random Forest"),
+  RMSE = c(regression_rmse, rmse_dt_tuned, rf_rmse),
+  R_squared = c(regression_r2, r_squared_dt, rf_r2)
+)
+
+performance <- performance_metrics %>%
+  pivot_longer(
+    cols = c(RMSE, R_squared),
+    names_to = "Metric",
+    values_to = "Value"
+  )
+
+# Create individual plots for RMSE and R-squared
+rmse_plot <- ggplot(performance_metrics, aes(x = Model, y = RMSE, fill = Model)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = sprintf("%.3f", RMSE)), vjust = -0.5) +
+  labs(
+    title = "RMSE Comparison Across Models",
+    x = "Model",
+    y = "RMSE (Calories)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  ) +
+  scale_fill_brewer(palette = "Set2")
+
+r2_plot <- ggplot(performance_metrics, aes(x = Model, y = R_squared, fill = Model)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = sprintf("%.3f", R_squared)), vjust = -0.5) +
+  labs(
+    title = "R^2 Comparison Across Models",
+    x = "Model",
+    y = "R²"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  ) +
+  scale_fill_brewer(palette = "Set2")
+
+# Display all plots
+print(comparison_plot)
+print(means_plot)
+print(rmse_plot)
+print(r2_plot)
