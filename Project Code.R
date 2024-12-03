@@ -480,7 +480,7 @@ cat("Test RMSE:", rf_rmse, "\n")
 mean_target_trained <- mean(trainData$Burns.Calories..per.30.min.)
 percentage_error_trained_tuned <- (train_rmse / mean_target_trained) * 100
 cat("Train RMSE as % of mean:", percentage_error_trained_tuned, "%\n")
-cat("Test RMSE as % of mean:", percentage_error_tuned, "%\n")
+cat("Test RMSE as % of mean:", percentage_error, "%\n")
 
 #-------------------------------------------------------------------------------------------------------------------------
 ### Author: Taylor Turner ###
