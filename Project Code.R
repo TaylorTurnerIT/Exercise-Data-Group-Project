@@ -438,8 +438,8 @@ rfModel <- train(Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.
                  method = "rf", 
                  trControl = trainControl,
                  tuneLength = 10,
-                 tuneGrid = expand.grid(mtry = c(7,8,9,10,11,12,13)),
-                 ntree = 900,
+                 tuneGrid = expand.grid(mtry = c(8,9,10,11,12,13)),
+                 ntree = 1200,
                  nodesize = 13,
                  maxnodes = 30,
                  importance = TRUE)
