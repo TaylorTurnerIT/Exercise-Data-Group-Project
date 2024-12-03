@@ -252,6 +252,20 @@ cat("R-squared:", regression_r2, "\n")
 ### Author: Gavin Walker ###
 # Section for Decision Tree
 
+## INCORRECT TRAINING MODEL
+train_controlDT <- trainControl(method = "cv", number = 10)
+
+dt_model_wrong <- train(
+  Burns.Calories..per.30.min. ~ Equipment.Needed.Bool+Difficulty.Level+total_reps+Arms+Chest+Back+Legs+Core,                   
+  data = trainData,               
+  method = "rpart",               
+  trControl = train_controlDT,      
+  tuneLength = 10                 
+)
+
+rpart.plot(dt_model_wrong$finalModel, main = "Decision Tree for Calorie Prediction")
+
+
 dt_model_tuned <- rpart(
   Burns.Calories..per.30.min. ~ Equipment.Needed.Bool + Difficulty.Level + total_reps + Arms + Chest + Back + Legs + Core,
   data = trainData,
