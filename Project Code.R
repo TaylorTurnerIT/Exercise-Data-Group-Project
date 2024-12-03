@@ -247,6 +247,7 @@ cat("RMSE:", regression_rmse, "\n")
 cat("R-squared:", regression_r2, "\n")
 
 #-------------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------
 
 ### Author: Gavin Walker ###
 # Section for Decision Tree
@@ -275,6 +276,37 @@ rpart.plot(dt_model_tuned)
 r_squared_dt <- cor(testData$Burns.Calories..per.30.min., predictions_dt_tuned)^2
 cat("R Squared:", r_squared_dt, "%\n")
 
+#------------------------------------
+
+# Gets feature importance
+feature_importance <- dt_model_tuned$variable.importance
+
+# Prints feature importance
+print(feature_importance)
+
+# Normalizes the features importance as percentages
+feature_importance <- feature_importance / sum(feature_importance) * 100
+
+importance_df <- data.frame(
+  Feature = names(feature_importance),
+  Importance = feature_importance
+)
+
+# Plots feature importance for the decision tree model
+ggplot(importance_df, aes(x = reorder(Feature, Importance), y = Importance, fill = Feature)) +
+  geom_bar(stat = "identity", width = 0.7) +
+  labs(
+    title = "Feature Importance in Decision Tree",
+    x = "Feature",
+    y = "Importance (%)"
+  ) +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2")
+
+print(importance_df)
+
+#------------------------------------
+
 ## Creates a baseline model from the mean to compare the decision tree model to
 mean_baseline <- mean(trainData$Burns.Calories..per.30.min.)
 
@@ -286,6 +318,7 @@ rmse_mean <- sqrt(mean((testData$Burns.Calories..per.30.min. - predictions_mean)
 cat("Baseline Mean RMSE:", rmse_mean, "\n")
 cat("Decision Tree RMSE: ", rmse_dt_tuned, "\n")
 
+#------------------------------------
 
 # Evaluates the model with the training data to test for overfitting
 train_predictions <- predict(dt_model_tuned, newdata = trainData)
@@ -300,7 +333,83 @@ percentage_error_trained_tuned <- (train_rmse / mean_target_trained) * 100
 cat("Train RMSE as % of mean:", percentage_error_trained_tuned, "%\n")
 cat("Test RMSE as % of mean:", percentage_error_tuned, "%\n")
 
+#------------------------------------
 
+## Graph to compare RMSE of Baseline Mean, Lin Reg, and Decision Tree
+dt_rmse_metrics <- data.frame(
+  Model = c("Baseline Mean", "Multiple Linear Regression", "Decision Tree"),
+  RMSE = c(rmse_mean, regression_rmse, rmse_dt_tuned)
+)
+
+dt1_rmse_plot <- ggplot(dt_rmse_metrics, aes(x = Model, y = RMSE, fill = Model)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = sprintf("%.3f", RMSE)), vjust = -0.5) +
+  labs(
+    title = "RMSE Comparison Across Models",
+    x = "Model",
+    y = "RMSE (Calories)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  ) +
+  scale_fill_brewer(palette = "Set2")
+
+print(dt1_rmse_plot)
+
+#------------------------------------
+
+## Graph to compare the R-squared values of the Multiple Linear Regression and Decision Tree models
+r2_metrics <- data.frame(
+  R_Squared_Model = c("Multiple Linear Regression","Decision Tree"),
+  R_squared = c(regression_r2, r_squared_dt)
+)
+
+dt1_r2_plot <- ggplot(r2_metrics, aes(x = R_Squared_Model, y = R_squared, fill = R_Squared_Model)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = sprintf("%.3f", R_squared)), vjust = -0.5) +
+  labs(
+    title = "R-Squared Comparison Across Models",
+    x = "Model",
+    y = "R-Squared"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  ) +
+  scale_fill_brewer(palette = "Set2")
+
+print(dt1_r2_plot)
+
+#------------------------------------
+
+## Graph to compare the RMSE for the training and test data to check for over-fitting
+overfitting_metrics <- data.frame(
+  Model = c("Train Data","Test Data"),
+  RMSE = c(train_rmse, rmse_dt_tuned)
+)
+
+overfitting_plot <- ggplot(overfitting_metrics, aes(x = Model, y = RMSE, fill = Model)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = sprintf("%.3f", RMSE)), vjust = -0.5) +
+  labs(
+    title = "RMSE Comparison for Training and Test Data Decision Trees",
+    x = "Model",
+    y = "RMSE"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  ) +
+  scale_fill_brewer(palette = "Set2")
+
+print(overfitting_plot)
+
+
+#-------------------------------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------------------
 
 ### Author: Jonah Perkins ###
