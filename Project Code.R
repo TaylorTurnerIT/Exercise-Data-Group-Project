@@ -265,6 +265,7 @@ dt_model_wrong <- train(
 
 rpart.plot(dt_model_wrong$finalModel, main = "Decision Tree for Calorie Prediction")
 
+#------------------------------------
 
 dt_model_tuned <- rpart(
   Burns.Calories..per.30.min. ~ Equipment.Needed.Bool + Difficulty.Level + total_reps + Arms + Chest + Back + Legs + Core,
