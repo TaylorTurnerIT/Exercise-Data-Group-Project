@@ -471,17 +471,90 @@ cat("Random Forest RMSE: ", rf_rmse, "\n")
 
 
 # Evaluates the model with the training data to test for overfitting
-train_predictions <- predict(rfModel, newdata = trainData)
-train_rmse <- sqrt(mean((train_predictions - trainData$Burns.Calories..per.30.min.)^2))
+train_predictions_rf <- predict(rfModel, newdata = trainData)
+train_rmse_rf <- sqrt(mean((train_predictions_rf - trainData$Burns.Calories..per.30.min.)^2))
 
 # Evaluation metrics for training and test data
-cat("Train RMSE:", train_rmse, "\n")
+cat("Train RMSE:", train_rmse_rf, "\n")
 cat("Test RMSE:", rf_rmse, "\n")
 
 mean_target_trained <- mean(trainData$Burns.Calories..per.30.min.)
-percentage_error_trained_tuned <- (train_rmse / mean_target_trained) * 100
+percentage_error_trained_tuned <- (train_rmse_rf / mean_target_trained) * 100
 cat("Train RMSE as % of mean:", percentage_error_trained_tuned, "%\n")
 cat("Test RMSE as % of mean:", percentage_error, "%\n")
+
+
+## RMSE Comparisons Graph
+rf_rmse_metrics <- data.frame(
+  Model = c("Mean Baseline","Linear Regression", "Decision Tree", "Random Forest"),
+  RMSE = c(rmse_mean,regression_rmse, rmse_dt_tuned, rf_rmse)
+)
+
+rf_rmse_plot <- ggplot(rf_rmse_metrics, aes(x = Model, y = RMSE, fill = Model)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = sprintf("%.3f", RMSE)), vjust = -0.5) +
+  labs(
+    title = "RMSE Comparison Across Models",
+    x = "Model",
+    y = "RMSE (Calories)"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  ) +
+  scale_fill_brewer(palette = "Set2")
+
+print(rf_rmse_plot)
+
+
+## R SQUARED Comparisons Graph
+r2_metrics_rf <- data.frame(
+  R_Squared_Model = c("Multiple Linear Regression","Decision Tree", "Random Forest"),
+  R_squared = c(regression_r2, r_squared_dt, r_squared_rf)
+)
+
+rf_r2_plot <- ggplot(r2_metrics_rf, aes(x = R_Squared_Model, y = R_squared, fill = R_Squared_Model)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = sprintf("%.3f", R_squared)), vjust = -0.5) +
+  labs(
+    title = "R-Squared Comparison Across Models",
+    x = "Model",
+    y = "R-Squared"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  ) +
+  scale_fill_brewer(palette = "Set2")
+
+print(rf_r2_plot)
+
+
+## RMSE Overfitting Graph
+overfitting_metrics_rf <- data.frame(
+  Model = c("Train Data","Test Data"),
+  RMSE = c(train_rmse_rf, rf_rmse)
+)
+
+overfitting_plot_rf <- ggplot(overfitting_metrics_rf, aes(x = Model, y = RMSE, fill = Model)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = sprintf("%.3f", RMSE)), vjust = -0.5) +
+  labs(
+    title = "RMSE Comparison for Training and Test Data Random Forests",
+    x = "Model",
+    y = "RMSE"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  ) +
+  scale_fill_brewer(palette = "Set2")
+
+print(overfitting_plot_rf)
+
 
 #-------------------------------------------------------------------------------------------------------------------------
 ### Author: Taylor Turner ###
