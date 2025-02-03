@@ -1,4 +1,4 @@
-# Predicting Exercise Effectiveness 🏋️♂️
+# Predicting Exercise Effectiveness
 
 ![R Version](https://img.shields.io/badge/R-%3E%3D4.1.0-blue)
 ![GitHub](https://img.shields.io/badge/License-MIT-green)
@@ -196,24 +196,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 - Dataset by Prajwal Dongre (Kaggle)
 - R community for open-source packages
-- College faculty for project guidance
-
-## 📁 Repository Structure
-```
-.
-├── data/
-│   ├── raw/
-│   └── processed/
-├── results/
-│   ├── plots/
-│   ├── analysis/
-│   └── diagnostics/
-├── src/
-│   └── exercise_analysis.R
-├── LICENSE
-├── README.md
-└── requirements.txt
-```
 
 **🔗 Links**  
 - [GitHub Repository](https://github.com/TaylorTurnerIT/Exercise-Data-Group-Project)  
