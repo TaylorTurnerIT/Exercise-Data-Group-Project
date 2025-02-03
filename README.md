@@ -72,9 +72,8 @@ The fitness industry lacks accessible tools for predicting exercise effectivenes
 - Random Forest showed best performance (15% error rate)
 - Most predictive features:  
   ```Legs (22.3%) > Difficulty Level (18.7%) > total_reps (16.4%)```
-- [View Full Analysis Code](https://github.com/TaylorTurnerIT/Exercise-Data-Group-Project)
 
-![Model Comparison](https://via.placeholder.com/600x400.png?text=RMSE+and+R²+Comparison+Plot)
+![Model Comparison](https://github.com/TaylorTurnerIT/Exercise-Data-Group-Project/blob/main/RF%20RMSE%20Plot.png)
 
 ---
 
@@ -117,7 +116,7 @@ The fitness industry lacks accessible tools for predicting exercise effectivenes
 ---
 
 ## 📜 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ---
 
